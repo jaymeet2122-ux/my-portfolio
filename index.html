@@ -103,8 +103,8 @@ section{padding:96px 0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;color:inherit;font:inherit;padding:0;cursor:pointer;transition:transform .25s,border-color .25s}
 .card:hover{transform:translateY(-4px);border-color:var(--amber)}
 .card[hidden]{display:none}
-.art{aspect-ratio:2/1;background:#080B0F;border-bottom:1px solid var(--line);position:relative}
-.art svg{width:100%;height:100%;display:block}
+.art{aspect-ratio:2/1;background:#080B0F;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.art img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 .pid{position:absolute;left:12px;top:10px;font:500 11px var(--mono);color:var(--amber);letter-spacing:.1em}
 .cbody{padding:20px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
 .cbody p{margin:0;color:var(--mut);font-size:15px}
@@ -295,7 +295,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 /* ============ JAYMEET'S PORTFOLIO CONTENT ============ */
 const STATS = [
   {n:4,  s:'',  l:'Projects built'},
-  {n:6,  s:'',  l:'Certificates & honors'},
+  {n:4,  s:'',  l:'Certificates & honors'},
   {n:88, s:'%', l:'Class XII (GSEB)'},
   {n:94, s:'%', l:'Class X (GSEB)'}
 ];
@@ -471,9 +471,12 @@ function art(seed) {
 const dlg = $('#dlg');
 PROJECTS.forEach((p, i) => {
   const c = mk('button','card rv'); c.type = 'button'; c.dataset.cat = p.cat;
-  c.innerHTML = `<div class="art">${art(i + 3)}<span class="pid">${p.id}</span></div><div class="cbody"><span class="issuer" style="color:var(--amber)">${p.cat}</span><h3>${p.title}</h3><p>${p.desc}</p><div class="chips">${p.stack.map(s=>`<span class="chip">${s}</span>`).join('')}</div><span class="more">Open details +</span></div>`;
+  const thumb = p.img
+    ? `<img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.outerHTML=decodeURIComponent('${encodeURIComponent(art(i + 3))}')">`
+    : art(i + 3);
+  c.innerHTML = `<div class="art">${thumb}<span class="pid">${p.id}</span></div><div class="cbody"><span class="issuer" style="color:var(--amber)">${p.cat}</span><h3>${p.title}</h3><p>${p.desc}</p><div class="chips">${p.stack.map(s=>`<span class="chip">${s}</span>`).join('')}</div><span class="more">Open details +</span></div>`;
   c.onclick = () => {
-    const shot = p.img ? `<img class="dlg-img" src="${p.img}" alt="${p.title} screenshot" onerror="this.remove()">` : '';
+    const shot = p.img ? `<img class="dlg-img" src="${p.img}" alt="${p.title} screenshot" onerror="this.outerHTML='<div class=dlg-note>Image not found at <b>${p.img}</b> — check exact filename &amp; extension on GitHub.</div>'">` : '';
     const links = p.links.length ? `<div style="display:flex;gap:18px;flex-wrap:wrap">${p.links.map(l=>`<a href="${l[1]}"${ext(l[1])} style="font:500 13px var(--mono)">${l[0]} &rarr;</a>`).join('')}</div>` : '';
     $('#dbody').innerHTML = `<span class="tag">${p.id} / ${p.cat}</span><h3 id="dt" style="font-size:28px">${p.title}</h3>${shot}<p>${p.desc}</p><div class="mono" style="font-size:13px;color:var(--cool)">${p.role}</div><ul>${p.points.map(x=>`<li>${x}</li>`).join('')}</ul><div class="chips">${p.stack.map(s=>`<span class="chip">${s}</span>`).join('')}</div>${links}<button class="btn close" type="button" id="cls">Close</button>`;
     dlg.showModal(); $('#cls').onclick = () => dlg.close();
@@ -482,7 +485,6 @@ PROJECTS.forEach((p, i) => {
 });
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 filters('#pf', PROJECTS, p => p.cat, '#pg');
-
 /* Certificates */
 CERTS.forEach(x => {
   const c = mk('article','cert'); c.dataset.cat = x.type;
