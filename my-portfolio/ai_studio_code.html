@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jaymeet Patel — CSE (AI/ML) Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0D11; --panel:#10151B; --panel2:#151B23; --line:#242D38;
+  --fg:#E9ECEF; --mut:#9AA5B1; --amber:#FFB347; --cool:#7FB2E5;
+  --display:'Chakra Petch',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 var(--body);overflow-x:hidden}
+a{color:var(--amber)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--mono)}
+.tag{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(44px,8vw,104px);line-height:.95;font-weight:700}
+h2{font-size:clamp(30px,4.4vw,48px);line-height:1.05;font-weight:600}
+h3{font-size:20px;font-weight:600;line-height:1.25}
+
+/* NAV */
+header{position:fixed;inset:0 0 auto;z-index:50;background:rgba(10,13,17,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.logo{display:flex;align-items:center;gap:10px;font:700 18px var(--display);color:var(--fg);text-decoration:none;letter-spacing:.04em}
+.led{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:blink 2.4s infinite}
+@keyframes blink{50%{opacity:.35}}
+nav{display:flex;gap:6px 22px;flex-wrap:wrap}
+nav a{color:var(--mut);text-decoration:none;font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 0}
+nav a:hover{color:var(--amber)}
+
+/* HERO */
+.hero{padding:140px 0 70px;position:relative}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 80% 30%,rgba(255,179,71,.10),transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:48px;align-items:center;position:relative}
+.hero-copy{display:flex;flex-direction:column;gap:24px;min-width:0}
+.hero-copy h1 span{color:var(--amber)}
+.hero-copy p{margin:0;color:var(--mut);font-size:18px;max-width:52ch}
+.hero-copy p b{color:var(--fg);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;min-height:46px;padding:0 22px;font:600 14px var(--mono);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:1px solid var(--amber);color:var(--amber);background:transparent;cursor:pointer;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.btn.solid{background:var(--amber);color:#1A1204}
+.btn:hover{filter:brightness(1.15)}
+
+/* SCOPE */
+.scope{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.02)}
+.scope-top{display:flex;justify-content:space-between;font:500 11px var(--mono);letter-spacing:.12em;color:var(--mut);padding:2px 4px 10px;text-transform:uppercase}
+.screen{position:relative;border-radius:8px;overflow:hidden;background:#06090C;border:1px solid #1B232C;aspect-ratio:4/3}
+canvas{display:block;width:100%;height:100%}
+.readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.ro{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.ro small{display:block;font:500 10px var(--mono);letter-spacing:.12em;color:var(--mut)}
+.ro b{font:500 17px var(--mono);color:var(--amber)}
+.hint{margin:10px 4px 0;font:400 12px var(--mono);color:var(--mut)}
+
+/* STATS */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--panel)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stat{padding:28px 20px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font:700 44px/1 var(--display);color:var(--fg)}
+.stat b i{font-style:normal;color:var(--amber)}
+.stat span{font:500 12px var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+
+/* SECTIONS */
+section{padding:96px 0}
+.head{display:flex;flex-direction:column;gap:10px;margin-bottom:40px;max-width:700px}
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px}
+.about p{margin:0 0 16px;color:var(--mut);font-size:17px}
+.about p:first-child{color:var(--fg);font-size:21px;line-height:1.5}
+.kv{border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.kv div{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);font-size:15px}
+.kv div:last-child{border-bottom:0}
+.kv span{font:500 12px var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase;padding-top:2px}
+.kv b{font-weight:500;text-align:right;overflow-wrap:anywhere}
+
+/* SKILLS */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px}
+.chan{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.chan h3{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.chan h3 em{font:500 11px var(--mono);font-style:normal;color:#1A1204;background:var(--amber);padding:2px 7px;border-radius:3px}
+.meter{margin-bottom:14px}
+.meter:last-child{margin-bottom:0}
+.meter-row{display:flex;justify-content:space-between;font:500 13px var(--mono);margin-bottom:6px}
+.meter-row span:last-child{color:var(--mut)}
+.bar{height:8px;border-radius:2px;background:#0A0E13;border:1px solid var(--line);display:flex;gap:2px;padding:1px}
+.seg{flex:1;background:#1B2430}
+.seg.on{background:var(--amber)}
+
+/* PROJECTS */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.f{font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;min-height:42px;padding:0 16px;border:1px solid var(--line);background:var(--panel);color:var(--mut);cursor:pointer;border-radius:999px}
+.f:hover{color:var(--fg);border-color:var(--mut)}
+.f[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#1A1204}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;color:inherit;font:inherit;padding:0;cursor:pointer;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--amber)}
+.card[hidden]{display:none}
+.art{aspect-ratio:2/1;background:#080B0F;border-bottom:1px solid var(--line);position:relative}
+.art svg{width:100%;height:100%;display:block}
+.pid{position:absolute;left:12px;top:10px;font:500 11px var(--mono);color:var(--amber);letter-spacing:.1em}
+.cbody{padding:20px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
+.cbody p{margin:0;color:var(--mut);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.chip{font:500 12px var(--mono);border:1px solid var(--line);color:var(--cool);padding:3px 9px;border-radius:4px}
+.more{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+
+dialog{width:min(740px,calc(100% - 32px));background:var(--panel);color:var(--fg);border:1px solid var(--amber);border-radius:14px;padding:0}
+dialog::backdrop{background:rgba(0,0,0,.78)}
+.dlg{padding:28px;display:flex;flex-direction:column;gap:16px}
+.dlg p{margin:0;color:var(--mut)}
+.dlg ul{margin:0;padding-left:18px;color:var(--mut)}
+.dlg li{margin-bottom:6px}
+.dlg-img{width:100%;max-height:58vh;object-fit:contain;border-radius:8px;border:1px solid var(--line);background:#080B0F}
+.dlg-note{font:400 12px var(--mono);color:var(--mut);padding:10px 12px;border:1px dashed var(--line);border-radius:8px}
+.close{align-self:flex-end}
+
+/* CERTIFICATES */
+.rail-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.rail-bar .filters{margin-bottom:0}
+.rail-nav{display:flex;gap:8px}
+.rail-nav .f{min-width:44px;padding:0 14px}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 2px 18px;scrollbar-color:var(--amber) var(--panel)}
+.cert{flex:0 0 min(86%,340px);scroll-snap-align:start;background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;position:relative}
+.cert[hidden]{display:none}
+.cert-top{padding:20px 20px 16px;display:flex;flex-direction:column;gap:10px;border-bottom:2px dashed var(--line);position:relative;flex-grow:1}
+.cert-top::before,.cert-top::after{content:"";position:absolute;bottom:-11px;width:20px;height:20px;border-radius:50%;background:var(--panel);border:1px solid var(--line)}
+.cert-top::before{left:-11px}.cert-top::after{right:-11px}
+.issuer{font:500 12px var(--mono);letter-spacing:.1em;color:var(--cool);text-transform:uppercase}
+.cert-bot{padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px}
+.barcode{height:34px;background:repeating-linear-gradient(90deg,var(--fg) 0 2px,transparent 2px 5px,var(--fg) 5px 6px,transparent 6px 9px,var(--fg) 9px 12px,transparent 12px 14px);opacity:.75;border-radius:2px}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:10px;font:400 12px var(--mono);color:var(--mut);flex-wrap:wrap}
+.crow span,.crow a{overflow-wrap:anywhere}
+.crow a{font-weight:500;text-decoration:none}
+.crow a:hover{text-decoration:underline}
+
+/* TIMELINE */
+.tl{position:relative;display:flex;flex-direction:column;gap:0}
+.tl::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--amber),var(--line))}
+.node{position:relative;padding:0 0 34px 38px}
+.node::before{content:"";position:absolute;left:0;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--amber)}
+.node p{margin:4px 0 0;color:var(--mut);max-width:62ch}
+.node .when{font:500 12px var(--mono);letter-spacing:.1em;color:var(--amber);text-transform:uppercase}
+
+/* CONTACT */
+.contact{background:var(--panel);border-top:1px solid var(--line)}
+.contact .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px;align-items:center}
+.big{font:600 clamp(22px,3.2vw,36px) var(--display);color:var(--amber);overflow-wrap:anywhere}
+.cl{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.cl div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.cl div:last-child{border-bottom:0}
+.cl span{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.cl a,.cl b{font:500 14px var(--mono);overflow-wrap:anywhere}
+.copy{font:500 12px var(--mono);background:none;border:1px solid var(--line);color:var(--amber);border-radius:5px;min-height:34px;padding:0 12px;cursor:pointer}
+.copy:hover{border-color:var(--amber)}
+footer{padding:26px 0;border-top:1px solid var(--line);font:400 12px var(--mono);color:var(--mut)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* reveal (content stays visible if JS fails) */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+.js .rv.in{opacity:1;transform:none}
+
+@media (max-width:860px){
+  .hero{padding-top:150px}
+  .hero .wrap,.about,.contact .wrap{grid-template-columns:minmax(0,1fr)}
+  .stats .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(3){border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  section{padding:70px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.led{animation:none}.js .rv{opacity:1;transform:none;transition:none}.card{transition:none}.rail{scroll-behavior:auto}}
+@media print{header{position:static}.js .rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="led"></span>JAYMEET PATEL</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#certs">Certificates</a><a href="#path">Path</a><a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="tag">// CSE (AI &amp; ML) / Class of 2030</span>
+        <h1>Jaymeet<br><span>Patel</span></h1>
+        <p><b>First-year B.Tech Computer Science (AI/ML) student</b> at Karnavati University. I build practical web interfaces, interactive AI app prototypes, and OLED-based Arduino hardware.</p>
+        <div class="btns">
+          <a class="btn solid" href="#projects">View projects</a>
+          <a class="btn" href="#certs">Certificates</a>
+          <a class="btn" href="resume.pdf" target="_blank" rel="noopener noreferrer">Resume &darr;</a>
+        </div>
+      </div>
+      <div class="scope" aria-label="Interactive oscilloscope">
+        <div class="scope-top"><span>CH1 / CH2</span><span>Live signal</span></div>
+        <div class="screen"><canvas id="scope" aria-hidden="true"></canvas></div>
+        <div class="readouts">
+          <div class="ro"><small>FREQ</small><b id="rF">0 Hz</b></div>
+          <div class="ro"><small>AMPL</small><b id="rA">0 V</b></div>
+          <div class="ro"><small>PHASE</small><b id="rP">0&deg;</b></div>
+        </div>
+        <p class="hint">Move your cursor over the screen to tune frequency and amplitude.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="wrap" id="stats"></div>
+  </div>
+
+  <section id="about">
+    <div class="wrap about">
+      <div class="rv">
+        <div class="head"><span class="tag">// 01 About</span><h2>Building from first principles—in code and hardware.</h2></div>
+        <p>I am a first-year B.Tech Computer Science Engineering (AI &amp; ML) student at Karnavati University, driven by curiosity for artificial intelligence, problem solving, and practical technology.</p>
+        <p>I learn by building: from civic-tech and healthcare dashboards like SmartSolve AI and MedCare, to interactive mobile concepts (ParkingEase AI) and physical OLED-based Arduino Morse Code hardware.</p>
+        <p>I am actively seeking student project collaborations, technical clubs, and foundational engineering opportunities where I can contribute and grow.</p>
+      </div>
+      <div class="kv rv" style="align-self:start;margin-top:8px">
+        <div><span>Discipline</span><b>B.Tech CSE (AI &amp; ML)</b></div>
+        <div><span>University</span><b>Karnavati University</b></div>
+        <div><span>Graduating</span><b>2030</b></div>
+        <div><span>Location</span><b>Ahmedabad, Gujarat, India</b></div>
+        <div><span>Languages</span><b>English, Gujarati, Hindi</b></div>
+        <div><span>Status</span><b>Open to student projects &amp; internships</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" style="background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="head rv"><span class="tag">// 02 Skills</span><h2>Channels I work on.</h2></div>
+      <div class="skills" id="skillGrid"></div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="head rv"><span class="tag">// 03 Projects</span><h2>Things I have designed and built.</h2></div>
+      <div class="filters" id="pf" role="group" aria-label="Filter projects"></div>
+      <div class="grid" id="pg"></div>
+    </div>
+  </section>
+
+  <section id="certs" style="background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="head rv"><span class="tag">// 04 Certificates</span><h2>Verified credentials &amp; honors.</h2></div>
+      <div class="rail-bar">
+        <div class="filters" id="cf" role="group" aria-label="Filter certificates"></div>
+        <div class="rail-nav">
+          <button class="f" type="button" id="cPrev" aria-label="Scroll certificates left">&larr;</button>
+          <button class="f" type="button" id="cNext" aria-label="Scroll certificates right">&rarr;</button>
+        </div>
+      </div>
+      <div class="rail" id="cg" tabindex="0" aria-label="Certificates, scroll sideways"></div>
+    </div>
+  </section>
+
+  <section id="path">
+    <div class="wrap">
+      <div class="head rv"><span class="tag">// 05 Path</span><h2>Education and leadership.</h2></div>
+      <div class="tl" id="tl"></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="rv">
+        <span class="tag">// 06 Contact</span>
+        <h2 style="margin:10px 0 18px">Have a build or project in mind? Let's talk.</h2>
+        <div class="big">jaymeetpatel@email.com</div>
+      </div>
+      <div class="cl" id="cl"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>JAYMEET PATEL / CSE (AI &amp; ML) Portfolio</span><span>Ahmedabad, India &bull; Updated Nov 2026</span></div></footer>
+
+<dialog id="dlg" aria-labelledby="dt"><div class="dlg" id="dbody"></div></dialog>
+
+<script>
+/* ============ JAYMEET'S PORTFOLIO CONTENT ============ */
+const STATS = [
+  {n:4,  s:'',  l:'Projects built'},
+  {n:6,  s:'',  l:'Certificates & honors'},
+  {n:88, s:'%', l:'Class XII (GSEB)'},
+  {n:94, s:'%', l:'Class X (GSEB)'}
+];
+
+const SKILLS = [
+  {t:'Programming Languages', c:'CH1', items:[['C (Foundations)',8],['Python',7],['C++',7]]},
+  {t:'AI & Problem Solving',  c:'CH2', items:[['AI & ML Foundations',7],['Generative AI Concepts',7],['Problem Solving (LeetCode)',7]]},
+  {t:'Tools & Platforms',     c:'CH3', items:[['Arduino IDE & Tinkercad',8],['Web UI & Prototyping',7],['Antigravity',7]]},
+  {t:'Leadership & Soft Skills', c:'CH4', items:[['Teamwork & Leadership',9],['Constructive Feedback',8],['Adaptability & Comm.',8]]}
+];
+
+const PROJECTS = [
+  {
+    id:'PRJ-01', cat:'AI / Web', title:'SmartSolve AI — Civic Support Platform',
+    desc:'An AI-powered citizen support web application that classifies civic or service complaints, detects priority, and routes users to the right department.',
+    stack:['ML Classification','Priority Detection','Complaint Tracking','Web UI'],
+    role:'Designer & Developer / Academic Project',
+    img:'projects/smartsolve.png',
+    points:[
+      'Built a guided complaint intake flow capturing user details, location, and natural-language issue descriptions.',
+      'Integrated ML-based issue categorization with automatic priority detection and department recommendation.',
+      'Designed status tracking via unique tracking IDs alongside a dedicated Admin view.'
+    ],
+    links:[]
+  },
+  {
+    id:'PRJ-02', cat:'Web App', title:'MedCare — Hospital Management Dashboard',
+    desc:'A structured healthcare administration portal designed to streamline patient records, doctor schedules, appointments, room availability, and billing.',
+    stack:['Web UI','Dashboard Design','Modular Layout','HTML / CSS / JS'],
+    role:'Frontend Designer / Project Build',
+    img:'projects/medcare.png',
+    points:[
+      'Designed an executive sidebar navigation system linking Dashboard, Patients, Doctors, Appointments, Rooms, and Billing.',
+      'Created overview metric cards and dedicated management modules for fast hospital workflow navigation.',
+      'Focused on clean visual hierarchy, accessible contrast, and distraction-free administrative UX.'
+    ],
+    links:[]
+  },
+  {
+    id:'PRJ-03', cat:'Embedded', title:'Arduino Morse Code Trainer & Automation Lab',
+    desc:'A physical Arduino Uno Morse Code learning device featuring an I2C OLED display with Learn Mode, alongside sensor-driven automation builds in Tinkercad.',
+    stack:['Arduino Uno','Arduino C++','I2C OLED Display','Tinkercad'],
+    role:'Hardware & Firmware Builder / Academic Project',
+    img:'projects/arduino.png',
+    points:[
+      'Built a mounted I2C OLED Morse Code trainer displaying letters, dot-dash patterns, and button navigation (SEL / BACK).',
+      'Wired and tested Arduino Uno circuits with LEDs, buzzers, push buttons, potentiometers, and ultrasonic sensors.',
+      'Programmed servo-motor actuation and sensor-based automation routines in Arduino C++ using Tinkercad.'
+    ],
+    links:[]
+  },
+  {
+    id:'PRJ-04', cat:'AI / Mobile UI', title:'ParkingEase AI — Smart Parking Prototype',
+    desc:'An interactive mobile prototype designed to help commuters in Ahmedabad search, compare, and reserve nearby parking spaces with AI-assisted picks.',
+    stack:['Interactive Prototype','Mobile UI / UX','Live Map View','AI Concept'],
+    role:'Product & UI Designer / B.Tech AI/ML Capstone',
+    img:'projects/parkingease.png',
+    points:[
+      'Built a mobile interface with natural-language search ("Find parking near CG Road"), Quick Park, Reserve, and Map View.',
+      'Designed an interactive Live Parking Map with availability markers and nearby lot cards showing distance, open slots, and ₹/hr rates.',
+      'Added "AI Pick" recommendations highlighting optimal nearby spots such as CG Road Smart Parking and Law Garden.'
+    ],
+    links:[]
+  }
+];
+
+const CERTS = [
+  {
+    type:'AI & ML',
+    name:'Artificial Intelligence Foundations: Thinking Machines',
+    issuer:'LinkedIn Learning',
+    date:'Nov 2026',
+    id:'9e4a85933d3b60ff67b95b1a5a2759023ae566b7caff94d2f90a5f7e0053526d',
+    shortId:'9e4a8593...3526d',
+    url:'',
+    img:'certs/ai-thinking-machines.png'
+  },
+  {
+    type:'AI & ML',
+    name:'Artificial Intelligence Foundations: Getting Started with Intelligent Systems',
+    issuer:'LinkedIn Learning',
+    date:'Nov 2026',
+    id:'37d52139629be574cd088f9b31b74a0ec1002debc4b57726d1fdc0ed6fa818ad',
+    shortId:'37d52139...818ad',
+    url:'',
+    img:'certs/ai-intelligent-systems.png'
+  },
+  {
+    type:'Programming',
+    name:'Complete Guide to C Programming Foundations',
+    issuer:'LinkedIn Learning',
+    date:'Nov 2026',
+    id:'090482652320045806574ec21957d1b5b68542f177d5f3e72a895ea1775dc91b',
+    shortId:'09048265...dc91b',
+    url:'',
+    img:'certs/c-programming-foundations.png'
+  },
+  {
+    type:'Leadership',
+    name:'Leadership through Feedback',
+    issuer:'LinkedIn Learning',
+    date:'Nov 2026',
+    id:'509302ba0b6fbc6cda6cef484ae495ccb73d7a81d6e9cc4f1fccff2f342c2ea9',
+    shortId:'509302ba...c2ea9',
+    url:'',
+    img:'certs/leadership-feedback.png'
+  },
+  {
+    type:'AI & ML',
+    name:'Jio AI Fundamental Course',
+    issuer:'Jio (Online)',
+    date:'2026',
+    id:'',
+    shortId:'',
+    url:'',
+    img:''
+  },
+  {
+    type:'Honors',
+    name:'Certificate of Recognition — Essay on Corruption & Political Events',
+    issuer:'Hon\'ble Chief Minister of Gujarat',
+    date:'School Honors',
+    id:'',
+    shortId:'',
+    url:'',
+    img:''
+  }
+];
+
+const PATH = [
+  {w:'2026 to 2030', t:'B.Tech in Computer Science Engineering (AI & ML)', p:'Karnavati University. First-year undergraduate focusing on programming fundamentals (C, C++, Python), artificial intelligence, problem solving, and practical web & hardware projects.'},
+  {w:'2024 to 2026', t:'Class XII (GSEB) & General Secretary', p:'Super English School, Ahmedabad. Scored 88% in Class XII. Appointed General Secretary of the higher secondary section and received an essay recognition certificate from the Hon\'ble Chief Minister of Gujarat.'},
+  {w:'2024', t:'Class X (GSEB)', p:'Super English School, Ahmedabad. Graduated with 94% aggregate.'}
+];
+
+const CONTACT = [
+  {k:'Email',    v:'jaymeetpatel@email.com', copy:1},
+  {k:'Phone',    v:'+91 97140 33511',        copy:1},
+  {k:'LinkedIn', v:'linkedin.com/in/Jaymeet-Patel', href:'https://www.linkedin.com/in/Jaymeet-Patel'},
+  {k:'Location', v:'Ahmedabad, Gujarat, India', copy:0}
+];
+/* ============ END OF CONTENT ============ */
+
+const $ = s => document.querySelector(s);
+const mk = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h !== undefined) n.innerHTML = h; return n; };
+const ext = u => u && u !== '#' ? ' target="_blank" rel="noopener noreferrer"' : '';
+document.documentElement.classList.add('js');
+
+/* Stats with count-up */
+STATS.forEach(s => {
+  const d = mk('div','stat rv');
+  d.innerHTML = `<b><span data-n="${s.n}">0</span><i>${s.s}</i></b><span>${s.l}</span>`;
+  $('#stats').append(d);
+});
+
+/* Skills as segmented meters */
+SKILLS.forEach(g => {
+  const b = mk('div','chan rv', `<h3><em>${g.c}</em>${g.t}</h3>`);
+  g.items.forEach(([n, lv]) => {
+    const m = mk('div','meter');
+    m.innerHTML = `<div class="meter-row"><span>${n}</span><span>${lv}/10</span></div><div class="bar" role="img" aria-label="${n} level ${lv} of 10">${Array.from({length:10},(_,i)=>`<div class="seg${i<lv?' on':''}"></div>`).join('')}</div>`;
+    b.append(m);
+  });
+  $('#skillGrid').append(b);
+});
+
+/* Filter helper */
+function filters(bar, items, cat, target, onSelect) {
+  ['All', ...new Set(items.map(cat))].forEach((v, i) => {
+    const b = mk('button','f',v); b.type = 'button'; b.setAttribute('aria-pressed', i === 0);
+    b.onclick = () => {
+      $(bar).querySelectorAll('.f').forEach(x => x.setAttribute('aria-pressed', x === b));
+      $(target).querySelectorAll('[data-cat]').forEach(c => c.hidden = v !== 'All' && c.dataset.cat !== v);
+      if (onSelect) onSelect();
+    };
+    $(bar).append(b);
+  });
+}
+
+/* Project art: generated circuit-trace schematic */
+function art(seed) {
+  let s = seed * 9301 + 49297; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  let out = '';
+  for (let i = 0; i < 9; i++) {
+    let x = Math.round(r() * 20) * 16, y = 20 + Math.round(r() * 8) * 14, d = `M${x} ${y}`;
+    for (let k = 0; k < 4; k++) { x += 30 + Math.round(r() * 5) * 10; d += ` H${x}`; const ny = Math.max(14, Math.min(146, y + (r() > .5 ? 1 : -1) * (14 + Math.round(r() * 3) * 14))); d += ` V${ny}`; y = ny; }
+    out += `<path d="${d}" fill="none" stroke="#FFB347" stroke-opacity="${.25 + r() * .5}" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="3.5" fill="#080B0F" stroke="#FFB347" stroke-width="1.5"/>`;
+  }
+  return `<svg viewBox="0 0 320 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${out}</svg>`;
+}
+
+/* Projects */
+const dlg = $('#dlg');
+PROJECTS.forEach((p, i) => {
+  const c = mk('button','card rv'); c.type = 'button'; c.dataset.cat = p.cat;
+  c.innerHTML = `<div class="art">${art(i + 3)}<span class="pid">${p.id}</span></div><div class="cbody"><span class="issuer" style="color:var(--amber)">${p.cat}</span><h3>${p.title}</h3><p>${p.desc}</p><div class="chips">${p.stack.map(s=>`<span class="chip">${s}</span>`).join('')}</div><span class="more">Open details +</span></div>`;
+  c.onclick = () => {
+    const shot = p.img ? `<img class="dlg-img" src="${p.img}" alt="${p.title} screenshot" onerror="this.remove()">` : '';
+    const links = p.links.length ? `<div style="display:flex;gap:18px;flex-wrap:wrap">${p.links.map(l=>`<a href="${l[1]}"${ext(l[1])} style="font:500 13px var(--mono)">${l[0]} &rarr;</a>`).join('')}</div>` : '';
+    $('#dbody').innerHTML = `<span class="tag">${p.id} / ${p.cat}</span><h3 id="dt" style="font-size:28px">${p.title}</h3>${shot}<p>${p.desc}</p><div class="mono" style="font-size:13px;color:var(--cool)">${p.role}</div><ul>${p.points.map(x=>`<li>${x}</li>`).join('')}</ul><div class="chips">${p.stack.map(s=>`<span class="chip">${s}</span>`).join('')}</div>${links}<button class="btn close" type="button" id="cls">Close</button>`;
+    dlg.showModal(); $('#cls').onclick = () => dlg.close();
+  };
+  $('#pg').append(c);
+});
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+filters('#pf', PROJECTS, p => p.cat, '#pg');
+
+/* Certificates */
+CERTS.forEach(x => {
+  const c = mk('article','cert'); c.dataset.cat = x.type;
+  const actions = [];
+  if (x.img) actions.push(`<button type="button" class="copy view-cert">View certificate</button>`);
+  if (x.url) actions.push(`<a href="${x.url}" target="_blank" rel="noopener noreferrer">Verify &rarr;</a>`);
+
+  c.innerHTML = `
+    <div class="cert-top">
+      <span class="issuer">${x.issuer}</span>
+      <h3>${x.name}</h3>
+      <span class="mono" style="font-size:12px;color:var(--mut)">${x.type}</span>
+    </div>
+    <div class="cert-bot">
+      <div class="barcode" aria-hidden="true"></div>
+      <div class="crow"><span>${x.date}</span><span>${x.shortId ? 'ID ' + x.shortId : (x.id ? 'ID ' + x.id : 'Verified')}</span></div>
+      ${actions.length ? `<div class="crow">${actions.join('')}</div>` : ''}
+    </div>`;
+
+  const btn = c.querySelector('.view-cert');
+  if (btn) {
+    btn.onclick = () => {
+      $('#dbody').innerHTML = `
+        <span class="tag">${x.type} / ${x.issuer}</span>
+        <h3 id="dt" style="font-size:24px">${x.name}</h3>
+        <img class="dlg-img" src="${x.img}" alt="${x.name} certificate" onerror="this.outerHTML='<div class=dlg-note>To preview this certificate image, save it at <b>${x.img}</b> next to index.html.</div>'">
+        <div class="crow"><span>Issued: ${x.date}</span>${x.id ? `<span>Credential ID: ${x.id}</span>` : ''}</div>
+        <button class="btn close" type="button" id="cls">Close</button>`;
+      dlg.showModal(); $('#cls').onclick = () => dlg.close();
+    };
+  }
+  $('#cg').append(c);
+});
+filters('#cf', CERTS, c => c.type, '#cg', () => $('#cg').scrollTo({left: 0}));
+$('#cPrev').onclick = () => $('#cg').scrollBy({left: -360, behavior: 'smooth'});
+$('#cNext').onclick = () => $('#cg').scrollBy({left: 360, behavior: 'smooth'});
+
+/* Timeline */
+PATH.forEach(n => $('#tl').append(mk('div','node rv', `<span class="when">${n.w}</span><h3>${n.t}</h3><p>${n.p}</p>`)));
+
+/* Contact */
+CONTACT.forEach(c => {
+  const r = mk('div'); r.append(mk('span','',c.k));
+  if (c.href) {
+    const a = mk('a','',c.v); a.href = c.href; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    r.append(a);
+  } else if (c.copy) {
+    r.append(mk('b','',c.v));
+    const b = mk('button','copy','Copy'); b.type = 'button';
+    b.onclick = async () => { try { await navigator.clipboard.writeText(c.v); b.textContent = 'Copied'; } catch (e) { b.textContent = 'Select text'; } setTimeout(() => b.textContent = 'Copy', 1500); };
+    r.append(b);
+  } else {
+    r.append(mk('b','',c.v));
+  }
+  $('#cl').append(r);
+});
+
+/* Reveal on scroll + counters */
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return; e.target.classList.add('in'); io.unobserve(e.target);
+  const n = e.target.querySelector('[data-n]');
+  if (n) {
+    const raw = n.dataset.n, T = +raw, dec = (raw.split('.')[1] || '').length, t0 = performance.now();
+    (function f(t) { const k = Math.min(1, (t - t0) / 900); n.textContent = (T * (1 - Math.pow(1 - k, 3))).toFixed(dec); if (k < 1) requestAnimationFrame(f); })(t0);
+  }
+}), {threshold:.15}) : null;
+document.querySelectorAll('.rv').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+setTimeout(() => document.querySelectorAll('.rv:not(.in)').forEach(el => { if (el.getBoundingClientRect().top < innerHeight) el.classList.add('in'); }), 1200);
+
+/* Oscilloscope */
+(function () {
+  const cv = $('#scope'), ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, tx = .35, ty = .55, mx = tx, my = ty, ph = 0, last = 0;
+  function size() { const d = devicePixelRatio || 1; W = cv.clientWidth; H = cv.clientHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+  function grid() {
+    ctx.fillStyle = '#06090C'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1; ctx.beginPath();
+    for (let i = 1; i < 10; i++) { const x = W * i / 10; ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (let i = 1; i < 8; i++) { const y = H * i / 8; ctx.moveTo(0, y); ctx.lineTo(W, y); } ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.beginPath(); ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
+  }
+  function trace(f, a, p, col, w, glow) {
+    ctx.beginPath(); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.shadowColor = col; ctx.shadowBlur = glow;
+    for (let x = 0; x <= W; x += 2) { const t = x / W * Math.PI * 2 * f + p; const y = H / 2 - (Math.sin(t) + .28 * Math.sin(3 * t + p * .5)) * a * H * .34; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    ctx.stroke(); ctx.shadowBlur = 0;
+  }
+  function frame(t) {
+    const dt = (t - last) / 1000; last = t;
+    mx += (tx - mx) * .08; my += (ty - my) * .08;
+    const f = 1 + mx * 6, a = .25 + (1 - my) * .75;
+    if (!reduce) ph += dt * 2.2;
+    grid(); trace(f * 2, a * .5, -ph * .7, 'rgba(127,178,229,.75)', 1.4, 6); trace(f, a, ph, '#FFB347', 2.2, 14);
+    $('#rF').textContent = (f * 50).toFixed(0) + ' Hz'; $('#rA').textContent = (a * 5).toFixed(2) + ' V'; $('#rP').textContent = (((ph * 57.3) % 360 + 360) % 360).toFixed(0) + '\u00B0';
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  function move(e) { const r = cv.getBoundingClientRect(), p = e.touches ? e.touches[0] : e; tx = Math.max(0, Math.min(1, (p.clientX - r.left) / r.width)); ty = Math.max(0, Math.min(1, (p.clientY - r.top) / r.height)); if (reduce) requestAnimationFrame(frame); }
+  cv.addEventListener('pointermove', move); cv.addEventListener('touchmove', move, {passive:true});
+  addEventListener('resize', () => { size(); if (reduce) requestAnimationFrame(frame); });
+  size(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
